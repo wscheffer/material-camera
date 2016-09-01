@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.afollestad.materialcamera.MaterialCamera;
+import com.afollestad.materialcamera.util.CameraUtil;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -58,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ;
 
         if (view.getId() == R.id.launchCameraStillshot)
-            materialCamera.stillShot(); // launches the Camera in stillshot mode
+            materialCamera
+                    .stillShot(); // launches the Camera in stillshot mode
 
         materialCamera.start(CAMERA_RQ);
     }

@@ -45,6 +45,8 @@ public class MaterialCamera {
     public static final int STATUS_RECORDED = 1;
     public static final int STATUS_RETRY = 2;
 
+    private CameraUtil.LockOrientation mLockOrientation = CameraUtil.LockOrientation.NONE;
+
     private Activity mContext;
     private long mLengthLimit = -1;
     private boolean mAllowRetry = true;
@@ -58,8 +60,7 @@ public class MaterialCamera {
     private boolean mRestartTimerOnRetry = false;
     private boolean mContinueTimerInPlayback = true;
     private boolean mForceCamera1 = false;
-    private boolean mStillShot;
-
+    private boolean mStillShot = false;
 
     private int mVideoEncodingBitRate = -1;
     private int mAudioEncodingBitRate = -1;
@@ -256,6 +257,11 @@ public class MaterialCamera {
         return this;
     }
 
+    public MaterialCamera setLockOrientation(CameraUtil.LockOrientation lockOrientation) {
+        mLockOrientation = lockOrientation;
+        return this;
+    }
+
     /**
      * Will take a still shot instead of recording
      * Note: Current implementation will default to using Camera1 API.
@@ -299,6 +305,8 @@ public class MaterialCamera {
             intent.putExtra(CameraIntentKey.MAX_ALLOWED_FILE_SIZE, mMaxFileSize);
         if (mQualityProfile > -1)
             intent.putExtra(CameraIntentKey.QUALITY_PROFILE, mQualityProfile);
+        if (mLockOrientation != CameraUtil.LockOrientation.NONE)
+            intent.putExtra(CameraIntentKey.CAMERA_ORIENTATION, mLockOrientation.getValue());
 
         if (mIconRecord != 0)
             intent.putExtra(CameraIntentKey.ICON_RECORD, mIconRecord);

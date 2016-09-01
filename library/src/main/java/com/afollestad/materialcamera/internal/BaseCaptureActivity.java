@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
@@ -106,6 +107,11 @@ public abstract class BaseCaptureActivity extends AppCompatActivity implements B
                         }
                     }).show();
             return;
+        }
+
+
+        if (getIntent().hasExtra(CameraIntentKey.CAMERA_ORIENTATION)) {
+            setFixedOrientation(getIntent().getIntExtra(CameraIntentKey.CAMERA_ORIENTATION, CameraUtil.LockOrientation.NONE.getValue()));
         }
         setContentView(R.layout.mcam_activity_videocapture);
 
@@ -267,7 +273,8 @@ public abstract class BaseCaptureActivity extends AppCompatActivity implements B
     public Object getCurrentCameraId() {
         if (getCurrentCameraPosition() == CAMERA_POSITION_FRONT)
             return getFrontCamera();
-        else return getBackCamera();
+        else
+            return getBackCamera();
     }
 
     @Override
@@ -555,5 +562,31 @@ public abstract class BaseCaptureActivity extends AppCompatActivity implements B
     @Override
     public boolean shouldHideFlash() {
         return !useStillshot() || mFlashModes == null;
+    }
+
+    @Override
+    public void setFixedOrientation(int orientation) {
+        int mOrientation;
+        switch (CameraUtil.LockOrientation.getType(getIntent().getIntExtra(CameraIntentKey.CAMERA_ORIENTATION, CameraUtil.LockOrientation.NONE.getValue()))) {
+            case LANDSCAPE:
+                mOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                break;
+            case PORTRAIT:
+                mOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                break;
+            default:
+                mOrientation = super.getRequestedOrientation();
+        }
+        this.setRequestedOrientation(mOrientation);
+    }
+
+    @Override
+    public int getFixedOrientation() {
+        return this.getRequestedOrientation();
+    }
+
+    @Override
+    public boolean hasFixedOrientation() {
+        return getIntent().hasExtra(CameraIntentKey.CAMERA_ORIENTATION);
     }
 }

@@ -107,7 +107,6 @@ public interface BaseCaptureInterface {
     int iconStillshot();
 
     /**
-     *
      * @return true if we only want to take photographs instead of video capture
      */
     boolean useStillshot();
@@ -130,4 +129,9 @@ public interface BaseCaptureInterface {
 
     boolean shouldHideFlash();
 
+    void setFixedOrientation(int orientation);
+
+    int getFixedOrientation();
+
+    boolean hasFixedOrientation();
 }
